@@ -1,6 +1,6 @@
 import type { GameBuildingBehavior } from './gameBuildings';
 import { getNextTile } from './utils/getDirectionTile';
-import b from '$lib/assets/belt.svg';
+import b from '$lib/assets/belt.png';
 
 const DEFAULT_COOLDOWN = 1_000;
 

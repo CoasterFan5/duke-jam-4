@@ -2,15 +2,16 @@ import type { GameMapManager } from '../mapManager/mapManager';
 import type { TileManager } from '../mapManager/tileManager';
 import { conveyer } from './conveyer';
 import { furnace } from './furnace';
-import { getNextTile } from './utils/getDirectionTile';
+import { miner } from './miner';
 
-export const gameBuildings = ['conveyer', 'producer', 'furnace', 'inserter'] as const;
+export const gameBuildings = ['conveyer', 'miner', 'furnace'] as const;
 
 export type GameBuildingName = (typeof gameBuildings)[number];
 
 /*
 tickAction should set the cooldown back to the default
 */
+
 export type GameBuildingBehavior = {
 	tickAction: (params: {
 		thisTile: TileManager;
@@ -21,27 +22,11 @@ export type GameBuildingBehavior = {
 	}) => void;
 	placeAction?: (params: { thisTile: TileManager }) => void;
 	defaultCooldown: number;
-	renderer?: string;
+	renderer: string;
 };
 
 export const gameBuildingBehavior: Record<GameBuildingName, GameBuildingBehavior> = {
 	conveyer: conveyer,
 	furnace,
-	producer: {
-		tickAction: ({ thisTile, x, y, mapManager }) => {
-			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
-			if (nt && !nt.data.holding) {
-				nt.setHolding('ironOre');
-				thisTile.data.cooldown = 1_000;
-			}
-		},
-		defaultCooldown: 1_000
-	},
-
-	inserter: {
-		tickAction: ({ thisTile }) => {
-			thisTile.setHolding('ironOre');
-		},
-		defaultCooldown: 1_000
-	}
+	miner
 };

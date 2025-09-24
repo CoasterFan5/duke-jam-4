@@ -1,6 +1,7 @@
 import type { GameBuildingBehavior } from './gameBuildings';
 import { getNextTile } from './utils/getDirectionTile';
 import type { GameItem } from '../mapManager/mapManager';
+import renderer from '$lib/assets/Smelter.png';
 
 const DEFAULT_COOLDOWN = 2_000;
 
@@ -27,5 +28,6 @@ export const furnace: GameBuildingBehavior = {
 	placeAction: ({ thisTile }) => {
 		thisTile.data.cooldown = DEFAULT_COOLDOWN;
 	},
-	defaultCooldown: DEFAULT_COOLDOWN
+	defaultCooldown: DEFAULT_COOLDOWN,
+	renderer
 };

@@ -4,9 +4,9 @@
 	import MapRender from '$lib/game/MapRender.svelte';
 
 	const map = new GameMapManager();
-	map.generate(10);
+	map.generate(20);
 
-	map.place(PLACE_HANDLERS.producer(), 0, 0, 'e');
+	map.place(PLACE_HANDLERS.miner(), 0, 0, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 1, 0, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 2, 0, 's');
 	map.place(PLACE_HANDLERS.conveyer(), 2, 1, 's');
@@ -28,6 +28,7 @@
 	//
 	map.place(PLACE_HANDLERS.furnace(), 8, 3, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 9, 3, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 10, 3, 'e');
 </script>
 
 <MapRender mapManager={map} />

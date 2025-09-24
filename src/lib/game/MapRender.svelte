@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buildingColorMap, itemColorMap } from './colorMaps';
+	import { itemColorMap } from './colorMaps';
 	import { gameBuildingBehavior } from './gameBuildings/gameBuildings';
 	import type { GameMapManager } from './mapManager/mapManager';
 	import type { FacingDirection } from './mapManager/tileManager';
@@ -57,20 +57,15 @@
 						if (t) {
 							if (t.data.building) {
 								const renderer = gameBuildingBehavior[t.data.building].renderer;
-								if (renderer) {
-									ctx.save();
-									const manipulationValues = imageManipulationValues[t.data.facing];
-									ctx.translate(x * tileSize, y * tileSize);
-									ctx.rotate(manipulationValues.r);
-									ctx.translate(manipulationValues.xOffset, manipulationValues.yOffset);
-									const img = new Image();
-									img.src = renderer;
-									ctx.drawImage(img, 0, 0);
-									ctx.restore();
-								} else {
-									ctx.fillStyle = buildingColorMap[t.data.building];
-									ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-								}
+								ctx.save();
+								const manipulationValues = imageManipulationValues[t.data.facing];
+								ctx.translate(x * tileSize, y * tileSize);
+								ctx.rotate(manipulationValues.r);
+								ctx.translate(manipulationValues.xOffset, manipulationValues.yOffset);
+								const img = new Image();
+								img.src = renderer;
+								ctx.drawImage(img, 0, 0);
+								ctx.restore();
 							} else {
 								ctx.fillStyle = 'gray';
 								ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);

@@ -2,9 +2,9 @@ import type { GameBuildingName } from '../gameBuildings/gameBuildings';
 import { TileManager } from './tileManager';
 
 export const PLACE_HANDLERS: Record<GameBuildingName, () => TileManager> = {
-	producer: () => {
+	miner: () => {
 		return new TileManager({
-			building: 'producer',
+			building: 'miner',
 			facing: 'e'
 		});
 	},
@@ -17,12 +17,6 @@ export const PLACE_HANDLERS: Record<GameBuildingName, () => TileManager> = {
 	conveyer: () => {
 		return new TileManager({
 			building: 'conveyer',
-			facing: 'e'
-		});
-	},
-	inserter: () => {
-		return new TileManager({
-			building: 'inserter',
 			facing: 'e'
 		});
 	}

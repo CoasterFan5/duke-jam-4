@@ -18,6 +18,11 @@ export type GameMapType = Record<number, Record<number, TileManager>>;
 export class GameMapManager {
 	size = 10;
 	private map: GameMapType;
+	private playerData: {
+		x: number;
+		y: number;
+		facing: number;
+	};
 	private tickables: Record<
 		string,
 		{
@@ -29,6 +34,11 @@ export class GameMapManager {
 
 	constructor() {
 		this.map = {};
+		this.playerData = {
+			x: 0,
+			y: 0,
+			facing: 0
+		};
 	}
 
 	generate(size: number) {
