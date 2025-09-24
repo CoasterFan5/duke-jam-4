@@ -6,6 +6,7 @@
 	import playerImage from '$lib/assets/Player.png';
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
+	import { tileSize } from './mapManager/tileSize';
 
 	const {
 		mapManager,
@@ -16,8 +17,6 @@
 	} = $props();
 
 	let canvas: HTMLCanvasElement | undefined = $state();
-
-	const tileSize = 32;
 
 	const imageManipulationValues: Record<
 		FacingDirection,
@@ -93,7 +92,7 @@
 				const playerHtmlImage = new Image();
 				playerHtmlImage.src = playerImage;
 				mapManager.getPlayerData();
-				ctx.drawImage(playerHtmlImage, playerData.x, playerData.y, 64, 64);
+				ctx.drawImage(playerHtmlImage, playerData.x, playerData.y);
 			}
 		}
 	};
@@ -104,6 +103,10 @@
 		mapManager.tick(diff, d);
 		tickPlayerMovement(keyboardManager, mapManager, diff);
 		lastD = d;
+
+		if (diff > 16.6666666667) {
+			console.warn('17ms tick');
+		}
 
 		tickRender();
 		requestAnimationFrame((d) => {

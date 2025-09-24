@@ -9,16 +9,16 @@ export const tickPlayerMovement = (
 	delta: number
 ) => {
 	const realDelta = delta / 1_000;
-	if (keyManager.isKeyActive('S')) {
+	if (keyManager.isKeyActive('S') || keyManager.isKeyActive('arrowdown')) {
 		mapManager.addPlayerPosition(0, realDelta * playerSpeed);
 	}
-	if (keyManager.isKeyActive('W')) {
+	if (keyManager.isKeyActive('W') || keyManager.isKeyActive('arrowup')) {
 		mapManager.addPlayerPosition(0, -realDelta * playerSpeed);
 	}
-	if (keyManager.isKeyActive('A')) {
+	if (keyManager.isKeyActive('A') || keyManager.isKeyActive('arrowleft')) {
 		mapManager.addPlayerPosition(-realDelta * playerSpeed, 0);
 	}
-	if (keyManager.isKeyActive('D')) {
+	if (keyManager.isKeyActive('D') || keyManager.isKeyActive('arrowright')) {
 		mapManager.addPlayerPosition(realDelta * playerSpeed, 0);
 	}
 };

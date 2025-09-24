@@ -5,14 +5,13 @@
 	import MapRender from '$lib/game/MapRender.svelte';
 
 	const map = new GameMapManager();
-	map.generate(20);
+	map.generate(250);
 
 	map.place(PLACE_HANDLERS.miner(), 0, 0, 'e');
-	map.place(PLACE_HANDLERS.conveyer(), 1, 0, 'e');
-	map.place(PLACE_HANDLERS.conveyer(), 2, 0, 's');
-	map.place(PLACE_HANDLERS.conveyer(), 2, 1, 's');
-	map.place(PLACE_HANDLERS.conveyer(), 2, 2, 's');
-	map.place(PLACE_HANDLERS.conveyer(), 2, 3, 'w');
+	map.place(PLACE_HANDLERS.miner(), 2, 0, 'w');
+	map.place(PLACE_HANDLERS.conveyer(), 1, 0, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 1, 1, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 1, 2, 's');
 	map.place(PLACE_HANDLERS.conveyer(), 1, 3, 'w');
 	map.place(PLACE_HANDLERS.conveyer(), 0, 3, 's');
 	map.place(PLACE_HANDLERS.conveyer(), 0, 4, 's');

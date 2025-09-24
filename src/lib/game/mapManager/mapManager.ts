@@ -1,5 +1,6 @@
 import { type GameBuildingName } from '../gameBuildings/gameBuildings';
 import { TileManager, type FacingDirection } from './tileManager';
+import { tileSize } from './tileSize';
 
 export const itemList = ['ironOre', 'ironPlate'] as const;
 export type GameItem = (typeof itemList)[number];
@@ -98,5 +99,8 @@ export class GameMapManager {
 	addPlayerPosition(x: number, y: number) {
 		this.playerData.x += x;
 		this.playerData.y += y;
+
+		this.playerData.x = Math.max(0, Math.min(this.size * tileSize, this.playerData.x));
+		this.playerData.y = Math.max(0, Math.min(this.size * tileSize, this.playerData.y));
 	}
 }
