@@ -7,6 +7,9 @@ export const gameBuildings = ['conveyer', 'producer', 'consumer', 'inserter'] as
 
 export type GameBuildingName = (typeof gameBuildings)[number];
 
+/*
+tickAction should set the cooldown back to the default
+*/
 export type GameBuildingBehavior = {
 	tickAction: (params: {
 		thisTile: TileManager;
@@ -27,6 +30,7 @@ export const gameBuildingBehavior: Record<GameBuildingName, GameBuildingBehavior
 			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
 			if (nt && !nt.data.holding) {
 				nt.setHolding('ironOre');
+				thisTile.data.cooldown = 1_000;
 			}
 		},
 		defaultCooldown: 1_000

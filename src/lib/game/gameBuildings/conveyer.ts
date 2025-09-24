@@ -10,6 +10,7 @@ export const conveyer: GameBuildingBehavior = {
 		if (nextTile && !nextTile.data.holding && thisTile.data.holding) {
 			nextTile.setHolding(thisTile.data.holding);
 			thisTile.clearHolding();
+			thisTile.data.cooldown = DEFAULT_COOLDOWN;
 		}
 	},
 	placeAction: ({ thisTile }) => {

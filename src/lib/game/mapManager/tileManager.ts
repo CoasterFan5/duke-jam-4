@@ -31,7 +31,7 @@ export class TileManager {
 					if (this.data.cooldown > 0) {
 						return;
 					}
-					this.data.cooldown = gameBuildingBehavior[this.data.building].defaultCooldown;
+					// The ticker is responsible for updating the cooldown
 				}
 
 				gameBuildingBehavior[this.data.building].tickAction({
