@@ -90,4 +90,13 @@ export class GameMapManager {
 			};
 		}
 	}
+
+	getPlayerData() {
+		return this.playerData;
+	}
+
+	addPlayerPosition(x: number, y: number) {
+		this.playerData.x += x;
+		this.playerData.y += y;
+	}
 }

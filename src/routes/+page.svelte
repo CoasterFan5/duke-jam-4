@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { KeyboardManager } from '$lib/game/keyboardManager';
 	import { GameMapManager } from '$lib/game/mapManager/mapManager';
 	import { PLACE_HANDLERS } from '$lib/game/mapManager/placeHandlers';
 	import MapRender from '$lib/game/MapRender.svelte';
@@ -29,9 +30,20 @@
 	map.place(PLACE_HANDLERS.furnace(), 8, 3, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 9, 3, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 10, 3, 'e');
+
+	const keyboardManager = new KeyboardManager();
+
+	$effect(() => {
+		document.addEventListener('keydown', (e) => {
+			keyboardManager.keyDown(e);
+		});
+		document.addEventListener('keyup', (e) => {
+			keyboardManager.keyUp(e);
+		});
+	});
 </script>
 
-<MapRender mapManager={map} />
+<MapRender mapManager={map} {keyboardManager} />
 
 <style lang="scss">
 	:global(body) {

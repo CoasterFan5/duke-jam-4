@@ -3,11 +3,16 @@
 	import { gameBuildingBehavior } from './gameBuildings/gameBuildings';
 	import type { GameMapManager } from './mapManager/mapManager';
 	import type { FacingDirection } from './mapManager/tileManager';
+	import playerImage from '$lib/assets/Player.png';
+	import { KeyboardManager } from './keyboardManager';
+	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
 
 	const {
-		mapManager
+		mapManager,
+		keyboardManager
 	}: {
 		mapManager: GameMapManager;
+		keyboardManager: KeyboardManager;
 	} = $props();
 
 	let canvas: HTMLCanvasElement | undefined = $state();
@@ -46,6 +51,7 @@
 
 	const tickRender = () => {
 		const size = mapManager.getSize();
+		const playerData = mapManager.getPlayerData();
 		if (canvas) {
 			canvas.height = canvas.clientHeight;
 			canvas.width = canvas.clientWidth;
@@ -82,6 +88,12 @@
 						}
 					}
 				}
+
+				//render player
+				const playerHtmlImage = new Image();
+				playerHtmlImage.src = playerImage;
+				mapManager.getPlayerData();
+				ctx.drawImage(playerHtmlImage, playerData.x, playerData.y, 64, 64);
 			}
 		}
 	};
@@ -90,6 +102,7 @@
 	const renderTickWrap = (d: number) => {
 		const diff = d - lastD;
 		mapManager.tick(diff, d);
+		tickPlayerMovement(keyboardManager, mapManager, diff);
 		lastD = d;
 
 		tickRender();
