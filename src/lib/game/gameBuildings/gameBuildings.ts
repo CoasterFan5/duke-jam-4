@@ -1,9 +1,10 @@
 import type { GameMapManager } from '../mapManager/mapManager';
 import type { TileManager } from '../mapManager/tileManager';
 import { conveyer } from './conveyer';
+import { furnace } from './furnace';
 import { getNextTile } from './utils/getDirectionTile';
 
-export const gameBuildings = ['conveyer', 'producer', 'consumer', 'inserter'] as const;
+export const gameBuildings = ['conveyer', 'producer', 'furnace', 'inserter'] as const;
 
 export type GameBuildingName = (typeof gameBuildings)[number];
 
@@ -25,6 +26,7 @@ export type GameBuildingBehavior = {
 
 export const gameBuildingBehavior: Record<GameBuildingName, GameBuildingBehavior> = {
 	conveyer: conveyer,
+	furnace,
 	producer: {
 		tickAction: ({ thisTile, x, y, mapManager }) => {
 			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
@@ -35,10 +37,7 @@ export const gameBuildingBehavior: Record<GameBuildingName, GameBuildingBehavior
 		},
 		defaultCooldown: 1_000
 	},
-	consumer: {
-		tickAction: () => {},
-		defaultCooldown: 1_000
-	},
+
 	inserter: {
 		tickAction: ({ thisTile }) => {
 			thisTile.setHolding('ironOre');

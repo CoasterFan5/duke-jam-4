@@ -26,7 +26,8 @@
 	map.place(PLACE_HANDLERS.conveyer(), 8, 5, 'n');
 	map.place(PLACE_HANDLERS.conveyer(), 8, 4, 'n');
 	//
-	map.place(PLACE_HANDLERS.consumer(), 8, 3, 'e');
+	map.place(PLACE_HANDLERS.furnace(), 8, 3, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 9, 3, 'e');
 </script>
 
 <MapRender mapManager={map} />

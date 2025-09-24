@@ -9,6 +9,7 @@ type TileManagerData = {
 	cooldown?: number;
 	holding?: GameItem;
 	lastTouchedByTick?: number;
+	processFinished?: boolean;
 };
 
 export class TileManager {

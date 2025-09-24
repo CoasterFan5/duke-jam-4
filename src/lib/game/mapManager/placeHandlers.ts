@@ -8,9 +8,9 @@ export const PLACE_HANDLERS: Record<GameBuildingName, () => TileManager> = {
 			facing: 'e'
 		});
 	},
-	consumer: () => {
+	furnace: () => {
 		return new TileManager({
-			building: 'consumer',
+			building: 'furnace',
 			facing: 'e'
 		});
 	},

@@ -7,7 +7,7 @@ const DEFAULT_COOLDOWN = 1_000;
 export const conveyer: GameBuildingBehavior = {
 	tickAction: ({ thisTile, mapManager, x, y }) => {
 		const nextTile = getNextTile(x, y, thisTile.data.facing, mapManager);
-		if (nextTile && !nextTile.data.holding && thisTile.data.holding) {
+		if (nextTile && !nextTile.data.holding && thisTile.data.holding && nextTile.data.building) {
 			nextTile.setHolding(thisTile.data.holding);
 			thisTile.clearHolding();
 			thisTile.data.cooldown = DEFAULT_COOLDOWN;
