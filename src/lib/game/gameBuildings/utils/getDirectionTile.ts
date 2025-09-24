@@ -40,7 +40,7 @@ export const getNextTile = (
 			return gameMapManager.getTile(x + 1, y);
 		}
 		case 'w': {
-			return gameMapManager.getTile(x - 1, y - 1);
+			return gameMapManager.getTile(x - 1, y);
 		}
 	}
 };

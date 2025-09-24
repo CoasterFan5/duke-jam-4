@@ -17,6 +17,7 @@ export type GameBuildingBehavior = {
 	}) => void;
 	placeAction?: (params: { thisTile: TileManager }) => void;
 	defaultCooldown: number;
+	renderer?: string;
 };
 
 export const gameBuildingBehavior: Record<GameBuildingName, GameBuildingBehavior> = {

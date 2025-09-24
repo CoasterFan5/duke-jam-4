@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { buildingColorMap, itemColorMap } from './colorMaps';
+	import { gameBuildingBehavior } from './gameBuildings/gameBuildings';
 	import type { GameMapManager } from './mapManager/mapManager';
+	import type { FacingDirection } from './mapManager/tileManager';
 
 	const {
 		mapManager
@@ -11,6 +13,36 @@
 	let canvas: HTMLCanvasElement | undefined = $state();
 
 	const tileSize = 32;
+
+	const imageManipulationValues: Record<
+		FacingDirection,
+		{
+			r: number;
+			xOffset: number;
+			yOffset: number;
+		}
+	> = {
+		n: {
+			r: 0,
+			xOffset: 0,
+			yOffset: 0
+		},
+		e: {
+			r: Math.PI / 2,
+			xOffset: 0,
+			yOffset: -32
+		},
+		s: {
+			r: Math.PI,
+			xOffset: -32,
+			yOffset: -32
+		},
+		w: {
+			r: Math.PI * 1.5,
+			xOffset: -32,
+			yOffset: 0
+		}
+	};
 
 	const tickRender = () => {
 		const size = mapManager.getSize();
@@ -24,11 +56,25 @@
 						const t = mapManager.getTile(x, y);
 						if (t) {
 							if (t.data.building) {
-								ctx.fillStyle = buildingColorMap[t.data.building];
+								const renderer = gameBuildingBehavior[t.data.building].renderer;
+								if (renderer) {
+									ctx.save();
+									const manipulationValues = imageManipulationValues[t.data.facing];
+									ctx.translate(x * tileSize, y * tileSize);
+									ctx.rotate(manipulationValues.r);
+									ctx.translate(manipulationValues.xOffset, manipulationValues.yOffset);
+									const img = new Image();
+									img.src = renderer;
+									ctx.drawImage(img, 0, 0);
+									ctx.restore();
+								} else {
+									ctx.fillStyle = buildingColorMap[t.data.building];
+									ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+								}
 							} else {
 								ctx.fillStyle = 'gray';
+								ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 							}
-							ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 							if (t.data.holding) {
 								ctx.fillStyle = itemColorMap[t.data.holding];
 								ctx.fillRect(

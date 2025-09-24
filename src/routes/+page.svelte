@@ -9,8 +9,24 @@
 	map.place(PLACE_HANDLERS.producer(), 0, 0, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 1, 0, 'e');
 	map.place(PLACE_HANDLERS.conveyer(), 2, 0, 's');
-	map.place(PLACE_HANDLERS.conveyer(), 2, 1, 'e');
-	map.place(PLACE_HANDLERS.consumer(), 3, 1, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 2, 1, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 2, 2, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 2, 3, 'w');
+	map.place(PLACE_HANDLERS.conveyer(), 1, 3, 'w');
+	map.place(PLACE_HANDLERS.conveyer(), 0, 3, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 0, 4, 's');
+	map.place(PLACE_HANDLERS.conveyer(), 0, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 1, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 2, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 3, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 4, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 5, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 6, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 7, 5, 'e');
+	map.place(PLACE_HANDLERS.conveyer(), 8, 5, 'n');
+	map.place(PLACE_HANDLERS.conveyer(), 8, 4, 'n');
+	//
+	map.place(PLACE_HANDLERS.consumer(), 8, 3, 'e');
 </script>
 
 <MapRender mapManager={map} />

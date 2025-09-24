@@ -1,5 +1,6 @@
 import type { GameBuildingBehavior } from './gameBuildings';
 import { getNextTile } from './utils/getDirectionTile';
+import b from '$lib/assets/belt.svg';
 
 const DEFAULT_COOLDOWN = 1_000;
 
@@ -14,5 +15,6 @@ export const conveyer: GameBuildingBehavior = {
 	placeAction: ({ thisTile }) => {
 		thisTile.data.cooldown = DEFAULT_COOLDOWN;
 	},
-	defaultCooldown: DEFAULT_COOLDOWN
+	defaultCooldown: DEFAULT_COOLDOWN,
+	renderer: b
 };
