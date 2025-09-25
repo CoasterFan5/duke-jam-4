@@ -17,6 +17,7 @@
 			class="item"
 			onclick={(e) => {
 				e.preventDefault();
+				e.stopPropagation();
 				mapManager.setSelectedBuilding(building);
 			}}
 		>

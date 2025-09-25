@@ -44,3 +44,25 @@ export const getNextTile = (
 		}
 	}
 };
+
+export const getRightTIle = (
+	x: number,
+	y: number,
+	facing: FacingDirection,
+	gameMapManager: GameMapManager
+) => {
+	switch (facing) {
+		case 'n': {
+			return gameMapManager.getTile(x + 1, y);
+		}
+		case 's': {
+			return gameMapManager.getTile(x - 1, y);
+		}
+		case 'e': {
+			return gameMapManager.getTile(x, y + 1);
+		}
+		case 'w': {
+			return gameMapManager.getTile(x, y - 1);
+		}
+	}
+};
