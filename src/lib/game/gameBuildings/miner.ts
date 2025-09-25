@@ -1,20 +1,44 @@
-import type { GameBuildingBehavior } from './gameBuildings';
 import { getNextTile } from './utils/getDirectionTile';
-import renderer from '$lib/assets/Miner.png';
+import imageData from '$lib/assets/Miner.png';
+import type { GameMapManager } from '../mapManager/mapManager';
+import type { TileManager } from '../mapManager/tileManager';
+import { GameBuilding, type TickMethodParams } from './utils/BehaviorBase';
 
-const defaultCooldown = 5_000;
+export class Miner extends GameBuilding {
+	private htmlImage: HTMLImageElement | undefined = undefined;
+	private cooldown = 0;
+	private DEFAULT_COOLDOWN = 5_000;
+	constructor() {
+		super();
+		this.cooldown = this.DEFAULT_COOLDOWN;
+	}
 
-export const miner: GameBuildingBehavior = {
-	tickAction: ({ thisTile, x, y, mapManager }) => {
-		const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
-		if (nt && !nt.data.holding) {
-			nt.setHolding('ironOre');
-			thisTile.data.cooldown = defaultCooldown;
+	new() {
+		return new Miner();
+	}
+
+	tick({ thisTile, mapManager, x, y, delta }: TickMethodParams) {
+		this.cooldown -= delta;
+		if (this.cooldown <= 0) {
+			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
+			if (nt && !nt.data.holding) {
+				nt.setHolding('ironOre');
+				this.cooldown = this.DEFAULT_COOLDOWN;
+			}
 		}
-	},
-	isValidPlacementLocation: ({ tile }) => {
+	}
+
+	isValidPlacement({ tile }: { tile: TileManager; gameManager: GameMapManager }) {
 		return !tile.data.building;
-	},
-	defaultCooldown: defaultCooldown,
-	renderer
-};
+	}
+
+	placeAction() {}
+
+	getRenderer() {
+		if (!this.htmlImage) {
+			this.htmlImage = new Image();
+			this.htmlImage.src = imageData;
+		}
+		return this.htmlImage;
+	}
+}

@@ -1,5 +1,5 @@
-import { gameBuildingBehavior, type GameBuildingName } from '../gameBuildings/gameBuildings';
-import { PLACE_HANDLERS } from './placeHandlers';
+import { type GameBuildingName } from '../gameBuildings/gameBuildings';
+import type { GameBuilding } from '../gameBuildings/utils/BehaviorBase';
 import { TileManager, type FacingDirection } from './tileManager';
 import { tileSize } from './tileSize';
 
@@ -28,7 +28,7 @@ export class GameMapManager {
 	private cursorData: {
 		x: number;
 		y: number;
-		selectedBuilding?: GameBuildingName;
+		selectedBuilding?: GameBuilding;
 		selectedDirection: FacingDirection;
 	} = { x: 0, y: 0, selectedDirection: 'n' };
 
@@ -87,8 +87,7 @@ export class GameMapManager {
 		}
 	}
 
-	place(item: TileManager, x: number, y: number, facing: FacingDirection) {
-		item.setFacing(facing);
+	place(item: TileManager, x: number, y: number) {
 		this.map[x][y] = item;
 
 		if (item.data.building) {
@@ -130,7 +129,7 @@ export class GameMapManager {
 		};
 	}
 
-	setSelectedBuilding(building: GameBuildingName) {
+	setSelectedBuilding(building: GameBuilding) {
 		this.cursorData.selectedBuilding = building;
 	}
 
@@ -163,21 +162,24 @@ export class GameMapManager {
 		return this.cursorData.selectedDirection;
 	}
 
-	handleClick(e: PointerEvent) {
+	handleClick() {
 		if (this.cursorData.selectedBuilding) {
 			const cursorPos = this.getCursorPosition();
 			const currentTile = this.getTile(cursorPos.tile.x, cursorPos.tile.y);
 			if (currentTile) {
-				const validPlacement = gameBuildingBehavior[
-					this.cursorData.selectedBuilding
-				].isValidPlacementLocation({ tile: currentTile, gameManager: this });
+				const validPlacement = this.cursorData.selectedBuilding.isValidPlacement({
+					tile: currentTile,
+					gameManager: this
+				});
 
 				if (validPlacement) {
 					this.place(
-						PLACE_HANDLERS[this.cursorData.selectedBuilding](),
+						new TileManager({
+							building: this.cursorData.selectedBuilding.new(),
+							facing: this.cursorData.selectedDirection
+						}),
 						cursorPos.tile.x,
-						cursorPos.tile.y,
-						this.cursorData.selectedDirection
+						cursorPos.tile.y
 					);
 				}
 			}

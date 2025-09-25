@@ -11,14 +11,16 @@
 
 <div class="wrap">
 	{#each gameBuildings as b (b)}
+		{@const building = new gameBuildingBehavior[b]()}
+		{@const buildingImage = building.getRenderer()}
 		<button
 			class="item"
 			onclick={(e) => {
 				e.preventDefault();
-				mapManager.setSelectedBuilding(b);
+				mapManager.setSelectedBuilding(building);
 			}}
 		>
-			<img height="32" width="32" src={gameBuildingBehavior[b].renderer} alt={b} />
+			<img src={buildingImage.src} alt={b} />
 		</button>
 	{/each}
 </div>

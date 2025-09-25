@@ -1,24 +1,49 @@
-import type { GameBuildingBehavior } from './gameBuildings';
 import { getNextTile } from './utils/getDirectionTile';
-import b from '$lib/assets/belt.png';
+import b from '$lib/assets/Belt.png';
+import {
+	GameBuilding,
+	type IsValidPlacementParams,
+	type TickMethodParams
+} from './utils/BehaviorBase';
 
-const DEFAULT_COOLDOWN = 1_000;
+export class Conveyer extends GameBuilding {
+	private DEFAULT_COOLDOWN = 1_000;
+	private cooldown = 0;
+	private htmlImage: HTMLImageElement | undefined = undefined;
 
-export const conveyer: GameBuildingBehavior = {
-	tickAction: ({ thisTile, mapManager, x, y }) => {
-		const nextTile = getNextTile(x, y, thisTile.data.facing, mapManager);
-		if (nextTile && !nextTile.data.holding && thisTile.data.holding && nextTile.data.building) {
-			nextTile.setHolding(thisTile.data.holding);
-			thisTile.clearHolding();
-			thisTile.data.cooldown = DEFAULT_COOLDOWN;
+	constructor() {
+		super();
+		this.cooldown = this.DEFAULT_COOLDOWN;
+	}
+
+	new() {
+		return new Conveyer();
+	}
+
+	override tick({ thisTile, mapManager, x, y, delta }: TickMethodParams) {
+		this.cooldown -= delta;
+		if (this.cooldown <= 0) {
+			const nextTile = getNextTile(x, y, thisTile.data.facing, mapManager);
+			if (nextTile && !nextTile.data.holding && thisTile.data.holding && nextTile.data.building) {
+				nextTile.setHolding(thisTile.data.holding);
+				thisTile.clearHolding();
+			}
 		}
-	},
-	placeAction: ({ thisTile }) => {
-		thisTile.data.cooldown = DEFAULT_COOLDOWN;
-	},
-	isValidPlacementLocation: ({ tile }) => {
+	}
+
+	override isValidPlacement({ tile }: IsValidPlacementParams) {
 		return !tile.data.building;
-	},
-	defaultCooldown: DEFAULT_COOLDOWN,
-	renderer: b
-};
+	}
+
+	override placeAction() {
+		this.cooldown = this.DEFAULT_COOLDOWN;
+	}
+
+	override getRenderer() {
+		if (!this.htmlImage) {
+			this.htmlImage = new Image();
+			this.htmlImage.src = b;
+		}
+		return this.htmlImage;
+	}
+}

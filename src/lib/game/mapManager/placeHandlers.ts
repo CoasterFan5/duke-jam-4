@@ -1,22 +1,25 @@
+import { Conveyer } from '../gameBuildings/conveyer';
+import { Furnace } from '../gameBuildings/furnace';
 import type { GameBuildingName } from '../gameBuildings/gameBuildings';
+import { Miner } from '../gameBuildings/miner';
 import { TileManager } from './tileManager';
 
 export const PLACE_HANDLERS: Record<GameBuildingName, () => TileManager> = {
-	miner: () => {
+	Miner: () => {
 		return new TileManager({
-			building: 'miner',
+			building: new Miner(),
 			facing: 'e'
 		});
 	},
-	furnace: () => {
+	Furnace: () => {
 		return new TileManager({
-			building: 'furnace',
+			building: new Furnace(),
 			facing: 'e'
 		});
 	},
-	conveyer: () => {
+	Conveyer: () => {
 		return new TileManager({
-			building: 'conveyer',
+			building: new Conveyer(),
 			facing: 'e'
 		});
 	}

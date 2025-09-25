@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { itemColorMap } from './colorMaps';
-	import { gameBuildingBehavior } from './gameBuildings/gameBuildings';
 	import type { GameMapManager } from './mapManager/mapManager';
 	import type { FacingDirection } from './mapManager/tileManager';
 	import playerImage from '$lib/assets/Player.png';
@@ -74,15 +73,13 @@
 						ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 						if (t) {
 							if (t.data.building) {
-								const renderer = gameBuildingBehavior[t.data.building].renderer;
+								const renderer = t.data.building.getRenderer();
 								ctx.save();
 								const manipulationValues = imageManipulationValues[t.data.facing];
 								ctx.translate(x * tileSize, y * tileSize);
 								ctx.rotate(manipulationValues.r);
 								ctx.translate(manipulationValues.xOffset, manipulationValues.yOffset);
-								const img = new Image();
-								img.src = renderer;
-								ctx.drawImage(img, 0, 0);
+								ctx.drawImage(renderer, 0, 0);
 								ctx.restore();
 							}
 							if (t.data.holding) {
@@ -107,9 +104,7 @@
 					ctx.translate(cPos.tile.x * tileSize, cPos.tile.y * tileSize);
 					ctx.rotate(imageManipulation.r);
 					ctx.globalAlpha = 0.5;
-					const buildingImage = new Image();
-					const buildingImageData = gameBuildingBehavior[b].renderer;
-					buildingImage.src = buildingImageData;
+					const buildingImage = b.getRenderer();
 					ctx.drawImage(buildingImage, imageManipulation.xOffset, imageManipulation.yOffset);
 					ctx.restore();
 				}
