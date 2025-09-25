@@ -41,6 +41,9 @@ export class TileManager {
 			this.data.building.placeAction?.({ thisTile: this });
 		}
 		this.data.holding = item;
+		if (this.data.building) {
+			this.data.building.postPlaceAction({ thisTile: this });
+		}
 	}
 
 	clearHolding() {

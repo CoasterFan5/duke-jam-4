@@ -36,4 +36,8 @@ export abstract class GameBuilding {
 	canAcceptItem(params: CanAcceptItemParams) {
 		return !params.tile.data.holding;
 	}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	postPlaceAction(params: PlaceActionParams) {
+		return;
+	}
 }

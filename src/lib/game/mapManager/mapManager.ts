@@ -3,7 +3,7 @@ import type { GameBuilding } from '../gameBuildings/utils/BehaviorBase';
 import { TileManager, type FacingDirection } from './tileManager';
 import { tileSize } from './tileSize';
 
-export const itemList = ['ironOre', 'ironPlate'] as const;
+export const itemList = ['ironOre', 'ironPlate', 'ironGear'] as const;
 export type GameItem = (typeof itemList)[number];
 
 export type Tile = {
