@@ -4,6 +4,7 @@
 	import type { FacingDirection } from './mapManager/tileManager';
 	import playerImage from '$lib/assets/Player.png';
 	import cursorImage from '$lib/assets/cursor.png';
+	import cursorOutOfRangeImageData from '$lib/assets/cursor_out_of_range.png';
 	import groundTile from '$lib/assets/ground.png';
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
@@ -111,8 +112,13 @@
 
 				//render cursor
 
+				const selectedTile = mapManager.getTile(cPos.tile.x, cPos.tile.y);
 				const cursorHtmlImage = new Image();
-				cursorHtmlImage.src = cursorImage;
+				if (selectedTile && !selectedTile.inPlayerPlaceRange({ map: mapManager })) {
+					cursorHtmlImage.src = cursorOutOfRangeImageData;
+				} else {
+					cursorHtmlImage.src = cursorImage;
+				}
 
 				ctx.drawImage(cursorHtmlImage, cPos.tile.x * tileSize, cPos.tile.y * tileSize);
 

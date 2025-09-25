@@ -56,7 +56,9 @@ export class GameMapManager {
 			this.map[x] = {};
 			for (let y = 0; y < size; y++) {
 				this.map[x][y] = new TileManager({
-					facing: 'n'
+					facing: 'n',
+					x,
+					y
 				});
 			}
 		}
@@ -101,6 +103,19 @@ export class GameMapManager {
 
 	getPlayerData() {
 		return this.playerData;
+	}
+
+	getPlayerPosition() {
+		return {
+			raw: {
+				x: this.playerData.x,
+				y: this.playerData.y
+			},
+			tile: {
+				x: Math.floor(this.playerData.x / 32),
+				y: Math.floor(this.playerData.y / 32)
+			}
+		};
 	}
 
 	addPlayerPosition(x: number, y: number) {
@@ -176,7 +191,9 @@ export class GameMapManager {
 					this.place(
 						new TileManager({
 							building: this.cursorData.selectedBuilding.new(),
-							facing: this.cursorData.selectedDirection
+							facing: this.cursorData.selectedDirection,
+							x: cursorPos.tile.x,
+							y: cursorPos.tile.y
 						}),
 						cursorPos.tile.x,
 						cursorPos.tile.y

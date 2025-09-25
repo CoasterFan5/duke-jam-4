@@ -8,12 +8,12 @@ type TileManagerData = {
 	facing: FacingDirection;
 	holding?: GameItem;
 	lastTouchedByTick?: number;
+	x: number;
+	y: number;
 };
 
 export class TileManager {
-	data: TileManagerData = {
-		facing: 'n'
-	};
+	data: TileManagerData;
 	constructor(args: TileManagerData) {
 		this.data = args;
 	}
@@ -55,5 +55,15 @@ export class TileManager {
 
 	setFacing(d: FacingDirection) {
 		this.data.facing = d;
+	}
+
+	inPlayerPlaceRange({ map }: { map: GameMapManager }): boolean {
+		// get the player x y in tiles
+		const playerPosition = map.getPlayerPosition();
+
+		return (
+			Math.abs(playerPosition.tile.x - this.data.x) <= 10 &&
+			Math.abs(playerPosition.tile.y - this.data.y) <= 10
+		);
 	}
 }
