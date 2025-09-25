@@ -1,4 +1,4 @@
-import type { GameMapManager } from '$lib/game/mapManager/mapManager';
+import type { GameItem, GameMapManager } from '$lib/game/mapManager/mapManager';
 import type { TileManager } from '$lib/game/mapManager/tileManager';
 
 export type TickMethodParams = {
@@ -17,6 +17,11 @@ export type IsValidPlacementParams = {
 	gameManager: GameMapManager;
 };
 
+export type CanAcceptItemParams = {
+	tile: TileManager;
+	itemName: GameItem;
+};
+
 export abstract class GameBuilding {
 	private COOLDOWN_TIME = 5_000;
 
@@ -27,4 +32,8 @@ export abstract class GameBuilding {
 	abstract isValidPlacement(params: IsValidPlacementParams): boolean;
 	abstract getRenderer(): HTMLImageElement;
 	abstract new(): GameBuilding;
+
+	canAcceptItem(params: CanAcceptItemParams) {
+		return !params.tile.data.holding;
+	}
 }

@@ -25,6 +25,17 @@ export class TileManager {
 		}
 	}
 
+	canHoldItem(item: GameItem) {
+		if (this.data.building) {
+			return this.data.building.canAcceptItem({
+				itemName: item,
+				tile: this
+			});
+		} else {
+			return !this.data.holding;
+		}
+	}
+
 	setHolding(item: GameItem) {
 		if (this.data.building) {
 			this.data.building.placeAction?.({ thisTile: this });

@@ -24,7 +24,12 @@ export class Conveyer extends GameBuilding {
 		this.cooldown -= delta;
 		if (this.cooldown <= 0) {
 			const nextTile = getNextTile(x, y, thisTile.data.facing, mapManager);
-			if (nextTile && !nextTile.data.holding && thisTile.data.holding && nextTile.data.building) {
+			if (
+				nextTile &&
+				thisTile.data.holding &&
+				nextTile.canHoldItem(thisTile.data.holding) &&
+				nextTile.data.building
+			) {
 				nextTile.setHolding(thisTile.data.holding);
 				thisTile.clearHolding();
 			}

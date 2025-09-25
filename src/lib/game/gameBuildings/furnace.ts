@@ -3,6 +3,7 @@ import imageData from '$lib/assets/Smelter.png';
 import type { GameItem } from '../mapManager/mapManager';
 import {
 	GameBuilding,
+	type CanAcceptItemParams,
 	type IsValidPlacementParams,
 	type TickMethodParams
 } from './utils/BehaviorBase';
@@ -31,8 +32,8 @@ export class Furnace extends GameBuilding {
 			const nextTile = getNextTile(x, y, thisTile.data.facing, mapManager);
 			if (
 				nextTile &&
-				!nextTile.data.holding &&
 				thisTile.data.holding &&
+				nextTile.canHoldItem(thisTile.data.holding) &&
 				productMap[thisTile.data.holding]
 			) {
 				const product = productMap[thisTile.data.holding];
@@ -58,5 +59,9 @@ export class Furnace extends GameBuilding {
 			this.htmlImage.src = imageData;
 		}
 		return this.htmlImage;
+	}
+
+	canAcceptItem({ tile, itemName }: CanAcceptItemParams) {
+		return !tile.data.holding && productMap[itemName] != undefined;
 	}
 }

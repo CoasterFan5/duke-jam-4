@@ -21,7 +21,7 @@ export class Miner extends GameBuilding {
 		this.cooldown -= delta;
 		if (this.cooldown <= 0) {
 			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
-			if (nt && !nt.data.holding) {
+			if (nt && !nt.data.holding && nt.data.building) {
 				nt.setHolding('ironOre');
 				this.cooldown = this.DEFAULT_COOLDOWN;
 			}
