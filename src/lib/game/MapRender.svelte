@@ -4,6 +4,8 @@
 	import type { GameMapManager } from './mapManager/mapManager';
 	import type { FacingDirection } from './mapManager/tileManager';
 	import playerImage from '$lib/assets/Player.png';
+	import cursorImage from '$lib/assets/cursor.png';
+	import groundTile from '$lib/assets/ground.png';
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
 	import { tileSize } from './mapManager/tileSize';
@@ -48,7 +50,14 @@
 		}
 	};
 
+	let groundTileHtmlImage: HTMLImageElement | undefined = undefined;
+
 	const tickRender = () => {
+		if (!groundTileHtmlImage) {
+			groundTileHtmlImage = new Image();
+			groundTileHtmlImage.src = groundTile;
+		}
+
 		const size = mapManager.getSize();
 		const playerData = mapManager.getPlayerData();
 		if (canvas) {
@@ -59,6 +68,10 @@
 				for (let x = 0; x < size; x++) {
 					for (let y = 0; y < size; y++) {
 						const t = mapManager.getTile(x, y);
+						// draw the ground
+						// ctx.drawImage(groundTileHtmlImage, x * tileSize, y * tileSize);
+						ctx.fillStyle = '#43264C';
+						ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 						if (t) {
 							if (t.data.building) {
 								const renderer = gameBuildingBehavior[t.data.building].renderer;
@@ -71,9 +84,6 @@
 								img.src = renderer;
 								ctx.drawImage(img, 0, 0);
 								ctx.restore();
-							} else {
-								ctx.fillStyle = 'gray';
-								ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 							}
 							if (t.data.holding) {
 								ctx.fillStyle = itemColorMap[t.data.holding];
@@ -87,6 +97,29 @@
 						}
 					}
 				}
+
+				//render ghost
+				const cPos = mapManager.getCursorPosition();
+				const b = mapManager.getSelectedBuilding();
+				if (b) {
+					const imageManipulation = imageManipulationValues[mapManager.getRotationDirection()];
+					ctx.save();
+					ctx.translate(cPos.tile.x * tileSize, cPos.tile.y * tileSize);
+					ctx.rotate(imageManipulation.r);
+					ctx.globalAlpha = 0.5;
+					const buildingImage = new Image();
+					const buildingImageData = gameBuildingBehavior[b].renderer;
+					buildingImage.src = buildingImageData;
+					ctx.drawImage(buildingImage, imageManipulation.xOffset, imageManipulation.yOffset);
+					ctx.restore();
+				}
+
+				//render cursor
+
+				const cursorHtmlImage = new Image();
+				cursorHtmlImage.src = cursorImage;
+
+				ctx.drawImage(cursorHtmlImage, cPos.tile.x * tileSize, cPos.tile.y * tileSize);
 
 				//render player
 				const playerHtmlImage = new Image();

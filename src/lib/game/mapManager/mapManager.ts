@@ -1,4 +1,5 @@
-import { type GameBuildingName } from '../gameBuildings/gameBuildings';
+import { gameBuildingBehavior, type GameBuildingName } from '../gameBuildings/gameBuildings';
+import { PLACE_HANDLERS } from './placeHandlers';
 import { TileManager, type FacingDirection } from './tileManager';
 import { tileSize } from './tileSize';
 
@@ -24,6 +25,13 @@ export class GameMapManager {
 		y: number;
 		facing: number;
 	};
+	private cursorData: {
+		x: number;
+		y: number;
+		selectedBuilding?: GameBuildingName;
+		selectedDirection: FacingDirection;
+	} = { x: 0, y: 0, selectedDirection: 'n' };
+
 	private tickables: Record<
 		string,
 		{
@@ -102,5 +110,77 @@ export class GameMapManager {
 
 		this.playerData.x = Math.max(0, Math.min(this.size * tileSize, this.playerData.x));
 		this.playerData.y = Math.max(0, Math.min(this.size * tileSize, this.playerData.y));
+	}
+
+	setCursorPosition(x: number, y: number) {
+		this.cursorData.x = x;
+		this.cursorData.y = y;
+	}
+
+	getCursorPosition() {
+		return {
+			raw: {
+				x: this.cursorData.x,
+				y: this.cursorData.y
+			},
+			tile: {
+				x: Math.floor(this.cursorData.x / tileSize),
+				y: Math.floor(this.cursorData.y / tileSize)
+			}
+		};
+	}
+
+	setSelectedBuilding(building: GameBuildingName) {
+		this.cursorData.selectedBuilding = building;
+	}
+
+	getSelectedBuilding() {
+		return this.cursorData.selectedBuilding;
+	}
+
+	rotatePlacementDirection() {
+		switch (this.cursorData.selectedDirection) {
+			case 'n': {
+				this.cursorData.selectedDirection = 'e';
+				break;
+			}
+			case 'e': {
+				this.cursorData.selectedDirection = 's';
+				break;
+			}
+			case 's': {
+				this.cursorData.selectedDirection = 'w';
+				break;
+			}
+			case 'w': {
+				this.cursorData.selectedDirection = 'n';
+				break;
+			}
+		}
+	}
+
+	getRotationDirection() {
+		return this.cursorData.selectedDirection;
+	}
+
+	handleClick(e: PointerEvent) {
+		if (this.cursorData.selectedBuilding) {
+			const cursorPos = this.getCursorPosition();
+			const currentTile = this.getTile(cursorPos.tile.x, cursorPos.tile.y);
+			if (currentTile) {
+				const validPlacement = gameBuildingBehavior[
+					this.cursorData.selectedBuilding
+				].isValidPlacementLocation({ tile: currentTile, gameManager: this });
+
+				if (validPlacement) {
+					this.place(
+						PLACE_HANDLERS[this.cursorData.selectedBuilding](),
+						cursorPos.tile.x,
+						cursorPos.tile.y,
+						this.cursorData.selectedDirection
+					);
+				}
+			}
+		}
 	}
 }

@@ -16,6 +16,9 @@ export const conveyer: GameBuildingBehavior = {
 	placeAction: ({ thisTile }) => {
 		thisTile.data.cooldown = DEFAULT_COOLDOWN;
 	},
+	isValidPlacementLocation: ({ tile }) => {
+		return !tile.data.building;
+	},
 	defaultCooldown: DEFAULT_COOLDOWN,
 	renderer: b
 };

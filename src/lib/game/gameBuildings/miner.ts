@@ -12,6 +12,9 @@ export const miner: GameBuildingBehavior = {
 			thisTile.data.cooldown = defaultCooldown;
 		}
 	},
+	isValidPlacementLocation: ({ tile }) => {
+		return !tile.data.building;
+	},
 	defaultCooldown: defaultCooldown,
 	renderer
 };

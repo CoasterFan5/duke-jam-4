@@ -28,6 +28,9 @@ export const furnace: GameBuildingBehavior = {
 	placeAction: ({ thisTile }) => {
 		thisTile.data.cooldown = DEFAULT_COOLDOWN;
 	},
+	isValidPlacementLocation: ({ tile }) => {
+		return !tile.data.building;
+	},
 	defaultCooldown: DEFAULT_COOLDOWN,
 	renderer
 };

@@ -16,7 +16,6 @@ export class TileManager {
 	data: TileManagerData = {
 		facing: 'n'
 	};
-
 	constructor(args: TileManagerData) {
 		this.data = args;
 		if (args.building) {

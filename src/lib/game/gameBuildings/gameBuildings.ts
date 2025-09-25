@@ -21,6 +21,7 @@ export type GameBuildingBehavior = {
 		tickId: number;
 	}) => void;
 	placeAction?: (params: { thisTile: TileManager }) => void;
+	isValidPlacementLocation: (args: { tile: TileManager; gameManager: GameMapManager }) => boolean;
 	defaultCooldown: number;
 	renderer: string;
 };
