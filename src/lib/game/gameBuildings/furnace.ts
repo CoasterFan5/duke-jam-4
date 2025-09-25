@@ -33,8 +33,8 @@ export class Furnace extends GameBuilding {
 			if (
 				nextTile &&
 				thisTile.data.holding &&
-				nextTile.canHoldItem(thisTile.data.holding) &&
-				productMap[thisTile.data.holding]
+				productMap[thisTile.data.holding] &&
+				nextTile.canHoldItem(productMap[thisTile.data.holding]!)
 			) {
 				const product = productMap[thisTile.data.holding];
 				if (product) {

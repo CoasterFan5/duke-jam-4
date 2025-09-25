@@ -52,7 +52,7 @@ export class Crafter extends GameBuilding {
 				};
 			}
 			realCounts[item].realCount -= 1;
-			if (realCounts[item].realCount <= 0) {
+			if (realCounts[item].realCount < 0) {
 				allowed = false;
 				break;
 			}
