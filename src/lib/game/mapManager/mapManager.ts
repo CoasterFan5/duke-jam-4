@@ -182,12 +182,14 @@ export class GameMapManager {
 			const cursorPos = this.getCursorPosition();
 			const currentTile = this.getTile(cursorPos.tile.x, cursorPos.tile.y);
 			if (currentTile) {
+				const inRange = currentTile.inPlayerPlaceRange({ map: this });
+
 				const validPlacement = this.cursorData.selectedBuilding.isValidPlacement({
 					tile: currentTile,
 					gameManager: this
 				});
 
-				if (validPlacement) {
+				if (validPlacement && inRange) {
 					this.place(
 						new TileManager({
 							building: this.cursorData.selectedBuilding.new(),
