@@ -144,8 +144,8 @@ export class GameMapManager {
 		const xTiles = Math.ceil(this.canvasDimensions.width / tileSize);
 		const yTiles = Math.ceil(this.canvasDimensions.height / tileSize);
 
-		const xTilesHalf = Math.ceil(xTiles / 2) - 2;
-		const yTilesHalf = Math.ceil(yTiles / 2);
+		const xTilesHalf = Math.floor(xTiles / 2);
+		const yTilesHalf = Math.floor(yTiles / 2);
 
 		return {
 			xTiles,
@@ -180,10 +180,6 @@ export class GameMapManager {
 			tile: {
 				x: Math.floor((this.cursorData.x + (this.playerData.x % tileSize)) / tileSize),
 				y: Math.floor((this.cursorData.y + (this.playerData.y % tileSize)) / tileSize)
-			},
-			real: {
-				x: Math.floor((this.cursorData.x + this.playerData.x) / tileSize),
-				y: Math.floor((this.cursorData.y + this.playerData.y) / tileSize)
 			}
 		};
 	}
@@ -242,8 +238,6 @@ export class GameMapManager {
 					tile: currentTile,
 					gameManager: this
 				});
-
-				console.log(currentTile, inRange, validPlacement);
 
 				if (validPlacement && inRange) {
 					this.place(

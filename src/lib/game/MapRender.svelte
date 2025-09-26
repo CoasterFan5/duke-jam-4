@@ -32,7 +32,7 @@
 			canvas.height = canvas.clientHeight;
 			canvas.width = canvas.clientWidth;
 
-			mapManager.setCanvasDimensions(canvas.height, canvas.width);
+			mapManager.setCanvasDimensions(canvas.width, canvas.height);
 
 			const ctx = canvas.getContext('2d');
 			if (ctx) {
@@ -114,8 +114,6 @@
 	$effect(() => {
 		renderTickWrap(0);
 	});
-
-	console.log(mapManager);
 </script>
 
 <canvas bind:this={canvas}> </canvas>

@@ -30,7 +30,7 @@ export const renderTiles = ({
 	yOffsetPx
 }: RenderTilesParams) => {
 	for (let x = -1; x < xTiles + 1; x++) {
-		for (let y = -1; y < yTiles + 4; y++) {
+		for (let y = -1; y < yTiles + 1; y++) {
 			const t = mapManager.getTile(x + xOffsetTiles - xTilesHalf, y + yOffsetTiles - yTilesHalf);
 			// draw the ground
 			// ctx.drawImage(groundTileHtmlImage, x * tileSize, y * tileSize);
