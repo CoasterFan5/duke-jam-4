@@ -74,7 +74,13 @@
 				const selectedTile = mapManager.getSelectedTile();
 				const cursorHtmlImage = new Image();
 				if (mapManager.getSelectedBuilding() && selectedTile) {
-					if (selectedTile.inPlayerPlaceRange({ map: mapManager })) {
+					if (
+						selectedTile.inPlayerPlaceRange({ map: mapManager }) &&
+						mapManager.getSelectedBuilding()?.isValidPlacement({
+							tile: selectedTile,
+							gameManager: mapManager
+						})
+					) {
 						cursorHtmlImage.src = cursorGoodImageData;
 					} else {
 						cursorHtmlImage.src = cursorOutOfRangeImageData;

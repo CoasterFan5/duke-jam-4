@@ -40,6 +40,7 @@
 		]
 	},
 	"dependencies": {
-		"@sveltejs/adapter-static": "^3.0.9"
+		"@sveltejs/adapter-static": "^3.0.9",
+		"simplex-noise": "^4.0.3"
 	}
 }

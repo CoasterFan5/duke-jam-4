@@ -1,10 +1,11 @@
+import { createNoise2D, type NoiseFunction2D } from 'simplex-noise';
 import { type GameBuildingName } from '../gameBuildings/gameBuildings';
 import type { GameBuilding } from '../gameBuildings/utils/BehaviorBase';
 import { UiManager } from '../uiManager/uiManager';
-import { TileManager, type FacingDirection } from './tileManager';
+import { TileManager, type FacingDirection, type TerrainType } from './tileManager';
 import { tileSize } from './tileSize';
 
-export const itemList = ['ironOre', 'ironPlate', 'ironGear', 'ironRod'] as const;
+export const itemList = ['ironOre', 'ironPlate', 'ironGear', 'ironRod', 'copperOre'] as const;
 export type GameItem = (typeof itemList)[number];
 
 export type Tile = {
@@ -19,7 +20,7 @@ export type Tile = {
 export type GameMapType = Record<number, Record<number, TileManager>>;
 
 export class GameMapManager {
-	size = 10;
+	size = 100;
 	public uiManager: UiManager = new UiManager();
 	private map: GameMapType;
 	private canvasDimensions: {
@@ -58,14 +59,32 @@ export class GameMapManager {
 
 	generate(size: number) {
 		this.size = size;
+
+		const noisePatterns: Record<TerrainType, NoiseFunction2D> = {
+			iron_ore: createNoise2D(),
+			copper_ore: createNoise2D()
+		};
+
 		for (let x = 0; x < size; x++) {
 			this.map[x] = {};
 			for (let y = 0; y < size; y++) {
-				this.map[x][y] = new TileManager({
-					facing: 'n',
-					x,
-					y
-				});
+				let terrain: TerrainType | undefined = undefined;
+				let highest = 0;
+				for (const ttype in noisePatterns) {
+					const terrainType = ttype as TerrainType;
+					const value = noisePatterns[terrainType](x, y);
+					if (value > 0.95 && value > highest) {
+						highest = value;
+						terrain = terrainType;
+					}
+
+					this.map[x][y] = new TileManager({
+						facing: 'n',
+						x,
+						y,
+						terrain: terrain
+					});
+				}
 			}
 		}
 	}
@@ -249,7 +268,8 @@ export class GameMapManager {
 							building: this.cursorData.selectedBuilding.new(),
 							facing: this.cursorData.selectedDirection,
 							x: currentTile.data.x,
-							y: currentTile.data.y
+							y: currentTile.data.y,
+							terrain: currentTile.data.terrain
 						}),
 						currentTile.data.x,
 						currentTile.data.y

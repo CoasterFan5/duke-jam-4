@@ -2,6 +2,8 @@ import type { GameBuilding } from '../gameBuildings/utils/BehaviorBase';
 import type { GameItem, GameMapManager } from './mapManager';
 
 export type FacingDirection = 'n' | 'e' | 's' | 'w';
+export const terrainTypes = ['iron_ore', 'copper_ore'] as const;
+export type TerrainType = (typeof terrainTypes)[number];
 
 type TileManagerData = {
 	building?: GameBuilding;
@@ -10,6 +12,7 @@ type TileManagerData = {
 	lastTouchedByTick?: number;
 	x: number;
 	y: number;
+	terrain?: TerrainType;
 };
 
 export class TileManager {

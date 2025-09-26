@@ -31,6 +31,10 @@ export class Crafter extends GameBuilding {
 		ironRod: {
 			count: 0,
 			max: 10
+		},
+		copperOre: {
+			count: 0,
+			max: 10
 		}
 	};
 

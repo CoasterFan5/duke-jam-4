@@ -1,7 +1,18 @@
 import { getNextTile } from './utils/getDirectionTile';
 import imageData from '$lib/assets/Miner.png';
 
-import { GameBuilding, type TickMethodParams } from './utils/BehaviorBase';
+import {
+	GameBuilding,
+	type IsValidPlacementParams,
+	type TickMethodParams
+} from './utils/BehaviorBase';
+import type { TerrainType } from '../mapManager/tileManager';
+import type { GameItem } from '../mapManager/mapManager';
+
+const terrainOresMap: Partial<Record<TerrainType, GameItem>> = {
+	iron_ore: 'ironOre',
+	copper_ore: 'copperOre'
+};
 
 export class Miner extends GameBuilding {
 	private htmlImage: HTMLImageElement | undefined = undefined;
@@ -21,7 +32,9 @@ export class Miner extends GameBuilding {
 		if (this.cooldown <= 0) {
 			const nt = getNextTile(x, y, thisTile.data.facing, mapManager);
 			if (nt && !nt.data.holding && nt.data.building) {
-				nt.setHolding('ironOre');
+				if (!!thisTile.data.terrain && terrainOresMap[thisTile.data.terrain]) {
+					nt.setHolding(terrainOresMap[thisTile.data.terrain]!);
+				}
 				this.cooldown = this.DEFAULT_COOLDOWN;
 			}
 		}
@@ -35,5 +48,9 @@ export class Miner extends GameBuilding {
 			this.htmlImage.src = imageData;
 		}
 		return this.htmlImage;
+	}
+
+	override isValidPlacement({ tile }: IsValidPlacementParams): boolean {
+		return !!tile.data.terrain && !!terrainOresMap[tile.data.terrain];
 	}
 }
