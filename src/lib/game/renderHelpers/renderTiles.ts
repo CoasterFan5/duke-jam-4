@@ -1,4 +1,4 @@
-import { itemColorMap } from '../colorMaps';
+import { itemImageMap } from '../colorMaps';
 import type { GameMapManager } from '../mapManager/mapManager';
 import { tileSize } from '../mapManager/tileSize';
 import { imageManipulationValues } from './imageManipulationValues';
@@ -53,13 +53,8 @@ export const renderTiles = ({
 				}
 
 				if (t.data.holding) {
-					ctx.fillStyle = itemColorMap[t.data.holding];
-					ctx.fillRect(
-						trueRenderX + tileSize / 4,
-						trueRenderY + tileSize / 4,
-						tileSize / 2,
-						tileSize / 2
-					);
+					const img = itemImageMap[t.data.holding];
+					ctx.drawImage(img, trueRenderX, trueRenderY);
 				}
 			}
 		}

@@ -24,5 +24,8 @@ export const tickPlayerMovement = (
 
 	if (keyManager.isKeyActive('escape')) {
 		mapManager.clearSelectedBuilding();
+		if (mapManager.uiManager.hasUi()) {
+			mapManager.uiManager.clearUi();
+		}
 	}
 };

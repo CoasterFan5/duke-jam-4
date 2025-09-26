@@ -17,8 +17,12 @@ export class UiManager {
 	}
 
 	getUi() {
-		return this.ui;
 		this._needsRendering = false;
+		return this.ui;
+	}
+
+	hasUi() {
+		return this.ui != undefined;
 	}
 
 	needsRendering(): boolean {
