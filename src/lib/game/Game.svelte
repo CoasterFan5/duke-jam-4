@@ -5,7 +5,7 @@
 	import Hotbar from './hotbar/Hotbar.svelte';
 
 	const map = new GameMapManager();
-	map.generate(250);
+	map.generate(25);
 
 	const keyboardManager = new KeyboardManager();
 

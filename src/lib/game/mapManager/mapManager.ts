@@ -131,8 +131,8 @@ export class GameMapManager {
 		this.playerData.x += x;
 		this.playerData.y += y;
 
-		this.playerData.x = Math.max(0, Math.min(this.size * tileSize, this.playerData.x));
-		this.playerData.y = Math.max(0, Math.min(this.size * tileSize, this.playerData.y));
+		this.playerData.x = Math.max(0, Math.min((this.size - 1) * tileSize, this.playerData.x));
+		this.playerData.y = Math.max(0, Math.min((this.size - 1) * tileSize, this.playerData.y));
 	}
 
 	setCursorPosition(x: number, y: number) {
