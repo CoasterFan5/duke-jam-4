@@ -3,6 +3,7 @@
 	import playerImage from '$lib/assets/Player.png';
 	import cursorImage from '$lib/assets/cursor.png';
 	import cursorOutOfRangeImageData from '$lib/assets/cursor_out_of_range.png';
+	import cursorGoodImageData from '$lib/assets/cursor_good.png';
 	import groundTile from '$lib/assets/ground.png';
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
@@ -69,8 +70,12 @@
 
 				const selectedTile = mapManager.getSelectedTile();
 				const cursorHtmlImage = new Image();
-				if (selectedTile && !selectedTile.inPlayerPlaceRange({ map: mapManager })) {
-					cursorHtmlImage.src = cursorOutOfRangeImageData;
+				if (mapManager.getSelectedBuilding() && selectedTile) {
+					if (selectedTile.inPlayerPlaceRange({ map: mapManager })) {
+						cursorHtmlImage.src = cursorGoodImageData;
+					} else {
+						cursorHtmlImage.src = cursorOutOfRangeImageData;
+					}
 				} else {
 					cursorHtmlImage.src = cursorImage;
 				}
