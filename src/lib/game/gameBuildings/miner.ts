@@ -1,7 +1,6 @@
 import { getNextTile } from './utils/getDirectionTile';
 import imageData from '$lib/assets/Miner.png';
-import type { GameMapManager } from '../mapManager/mapManager';
-import type { TileManager } from '../mapManager/tileManager';
+
 import { GameBuilding, type TickMethodParams } from './utils/BehaviorBase';
 
 export class Miner extends GameBuilding {
@@ -26,10 +25,6 @@ export class Miner extends GameBuilding {
 				this.cooldown = this.DEFAULT_COOLDOWN;
 			}
 		}
-	}
-
-	isValidPlacement({ tile }: { tile: TileManager; gameManager: GameMapManager }) {
-		return !tile.data.building;
 	}
 
 	placeAction() {}

@@ -3,7 +3,6 @@ import imageData from '$lib/assets/Crafter.png';
 import {
 	GameBuilding,
 	type CanAcceptItemParams,
-	type IsValidPlacementParams,
 	type PlaceActionParams,
 	type TickMethodParams
 } from './utils/BehaviorBase';
@@ -77,10 +76,6 @@ export class Crafter extends GameBuilding {
 			this.storage[thisTile.data.holding].count += 1;
 			thisTile.clearHolding();
 		}
-	}
-
-	override isValidPlacement({ tile }: IsValidPlacementParams): boolean {
-		return !tile.data.building;
 	}
 
 	override getRenderer(): HTMLImageElement {

@@ -29,9 +29,13 @@ export abstract class GameBuilding {
 
 	abstract tick(params: TickMethodParams): void;
 	abstract placeAction(params: PlaceActionParams): void;
-	abstract isValidPlacement(params: IsValidPlacementParams): boolean;
 	abstract getRenderer(): HTMLImageElement;
 	abstract new(): GameBuilding;
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	isValidPlacement(params: IsValidPlacementParams): boolean {
+		return true;
+	}
 
 	canAcceptItem(params: CanAcceptItemParams) {
 		return !params.tile.data.holding;

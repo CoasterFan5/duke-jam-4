@@ -1,8 +1,4 @@
-import {
-	GameBuilding,
-	type IsValidPlacementParams,
-	type TickMethodParams
-} from './utils/BehaviorBase';
+import { GameBuilding, type TickMethodParams } from './utils/BehaviorBase';
 import imageData from '$lib/assets/Splitter.png';
 import { getNextTile, getRightTIle } from './utils/getDirectionTile';
 
@@ -42,10 +38,6 @@ export class Splitter extends GameBuilding {
 				}
 			}
 		}
-	}
-
-	override isValidPlacement({ tile }: IsValidPlacementParams) {
-		return !tile.data.building;
 	}
 
 	override placeAction() {

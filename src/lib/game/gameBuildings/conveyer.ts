@@ -1,10 +1,6 @@
 import { getNextTile } from './utils/getDirectionTile';
 import b from '$lib/assets/Belt.png';
-import {
-	GameBuilding,
-	type IsValidPlacementParams,
-	type TickMethodParams
-} from './utils/BehaviorBase';
+import { GameBuilding, type TickMethodParams } from './utils/BehaviorBase';
 
 export class Conveyer extends GameBuilding {
 	private DEFAULT_COOLDOWN = 1_000;
@@ -34,10 +30,6 @@ export class Conveyer extends GameBuilding {
 				thisTile.clearHolding();
 			}
 		}
-	}
-
-	override isValidPlacement({ tile }: IsValidPlacementParams) {
-		return !tile.data.building;
 	}
 
 	override placeAction() {

@@ -4,7 +4,6 @@ import type { GameItem } from '../mapManager/mapManager';
 import {
 	GameBuilding,
 	type CanAcceptItemParams,
-	type IsValidPlacementParams,
 	type TickMethodParams
 } from './utils/BehaviorBase';
 
@@ -43,10 +42,6 @@ export class Furnace extends GameBuilding {
 				}
 			}
 		}
-	}
-
-	isValidPlacement({ tile }: IsValidPlacementParams) {
-		return !tile.data.building;
 	}
 
 	placeAction() {
