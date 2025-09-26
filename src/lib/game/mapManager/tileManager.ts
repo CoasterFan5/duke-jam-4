@@ -62,8 +62,8 @@ export class TileManager {
 		const playerPosition = map.getPlayerPosition();
 
 		return (
-			Math.abs(playerPosition.tile.x - this.data.x) <= 7 &&
-			Math.abs(playerPosition.tile.y - this.data.y) <= 7
+			Math.abs(playerPosition.tile.x - this.data.x) <= 5 &&
+			Math.abs(playerPosition.tile.y - this.data.y) <= 5
 		);
 	}
 }

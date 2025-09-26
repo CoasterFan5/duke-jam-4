@@ -20,6 +20,10 @@ export type GameMapType = Record<number, Record<number, TileManager>>;
 export class GameMapManager {
 	size = 10;
 	private map: GameMapType;
+	private canvasDimensions: {
+		width: number;
+		height: number;
+	} = { width: 0, height: 0 };
 	private playerData: {
 		x: number;
 		y: number;
@@ -74,6 +78,11 @@ export class GameMapManager {
 
 	getSize() {
 		return this.size;
+	}
+
+	setCanvasDimensions(width: number, height: number) {
+		this.canvasDimensions.width = width;
+		this.canvasDimensions.height = height;
 	}
 
 	tick(delta: number, tickId: number) {
@@ -131,6 +140,37 @@ export class GameMapManager {
 		this.cursorData.y = y;
 	}
 
+	getTileDetails() {
+		const xTiles = Math.ceil(this.canvasDimensions.width / tileSize);
+		const yTiles = Math.ceil(this.canvasDimensions.height / tileSize);
+
+		const xTilesHalf = Math.ceil(xTiles / 2) - 2;
+		const yTilesHalf = Math.ceil(yTiles / 2);
+
+		return {
+			xTiles,
+			yTiles,
+			xTilesHalf,
+			yTilesHalf
+		};
+	}
+
+	getOffsets() {
+		const playerPos = this.getPlayerPosition();
+		const xOffsetTiles = playerPos.tile.x;
+		const xOffsetPx = playerPos.raw.x % tileSize;
+
+		const yOffsetTiles = playerPos.tile.y;
+		const yOffsetPx = playerPos.raw.y % tileSize;
+
+		return {
+			xOffsetTiles,
+			xOffsetPx,
+			yOffsetTiles,
+			yOffsetPx
+		};
+	}
+
 	getCursorPosition() {
 		return {
 			raw: {
@@ -138,8 +178,12 @@ export class GameMapManager {
 				y: this.cursorData.y
 			},
 			tile: {
-				x: Math.floor(this.cursorData.x / tileSize),
-				y: Math.floor(this.cursorData.y / tileSize)
+				x: Math.floor((this.cursorData.x + (this.playerData.x % tileSize)) / tileSize),
+				y: Math.floor((this.cursorData.y + (this.playerData.y % tileSize)) / tileSize)
+			},
+			real: {
+				x: Math.floor((this.cursorData.x + this.playerData.x) / tileSize),
+				y: Math.floor((this.cursorData.y + this.playerData.y) / tileSize)
 			}
 		};
 	}
@@ -150,6 +194,16 @@ export class GameMapManager {
 
 	getSelectedBuilding() {
 		return this.cursorData.selectedBuilding;
+	}
+
+	getSelectedTile() {
+		const cursorData = this.getCursorPosition();
+		const offsets = this.getOffsets();
+		const tileDetails = this.getTileDetails();
+		return this.getTile(
+			cursorData.tile.x + offsets.xOffsetTiles - tileDetails.xTilesHalf,
+			cursorData.tile.y + offsets.yOffsetTiles - tileDetails.yTilesHalf
+		);
 	}
 
 	rotatePlacementDirection() {
@@ -179,8 +233,8 @@ export class GameMapManager {
 
 	handleClick() {
 		if (this.cursorData.selectedBuilding) {
-			const cursorPos = this.getCursorPosition();
-			const currentTile = this.getTile(cursorPos.tile.x, cursorPos.tile.y);
+			const currentTile = this.getSelectedTile();
+
 			if (currentTile) {
 				const inRange = currentTile.inPlayerPlaceRange({ map: this });
 
@@ -189,16 +243,18 @@ export class GameMapManager {
 					gameManager: this
 				});
 
+				console.log(currentTile, inRange, validPlacement);
+
 				if (validPlacement && inRange) {
 					this.place(
 						new TileManager({
 							building: this.cursorData.selectedBuilding.new(),
 							facing: this.cursorData.selectedDirection,
-							x: cursorPos.tile.x,
-							y: cursorPos.tile.y
+							x: currentTile.data.x,
+							y: currentTile.data.y
 						}),
-						cursorPos.tile.x,
-						cursorPos.tile.y
+						currentTile.data.x,
+						currentTile.data.y
 					);
 				}
 			}

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { itemColorMap } from './colorMaps';
 	import type { GameMapManager } from './mapManager/mapManager';
-	import type { FacingDirection } from './mapManager/tileManager';
 	import playerImage from '$lib/assets/Player.png';
 	import cursorImage from '$lib/assets/cursor.png';
 	import cursorOutOfRangeImageData from '$lib/assets/cursor_out_of_range.png';
@@ -9,6 +7,8 @@
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
 	import { tileSize } from './mapManager/tileSize';
+	import { renderTiles } from './renderHelpers/renderTiles';
+	import { imageManipulationValues } from './renderHelpers/imageManipulationValues';
 
 	const {
 		mapManager,
@@ -20,36 +20,6 @@
 
 	let canvas: HTMLCanvasElement | undefined = $state();
 
-	const imageManipulationValues: Record<
-		FacingDirection,
-		{
-			r: number;
-			xOffset: number;
-			yOffset: number;
-		}
-	> = {
-		n: {
-			r: 0,
-			xOffset: 0,
-			yOffset: 0
-		},
-		e: {
-			r: Math.PI / 2,
-			xOffset: 0,
-			yOffset: -32
-		},
-		s: {
-			r: Math.PI,
-			xOffset: -32,
-			yOffset: -32
-		},
-		w: {
-			r: Math.PI * 1.5,
-			xOffset: -32,
-			yOffset: 0
-		}
-	};
-
 	let groundTileHtmlImage: HTMLImageElement | undefined = undefined;
 
 	const tickRender = () => {
@@ -58,43 +28,25 @@
 			groundTileHtmlImage.src = groundTile;
 		}
 
-		const size = mapManager.getSize();
-		const playerData = mapManager.getPlayerData();
 		if (canvas) {
 			canvas.height = canvas.clientHeight;
 			canvas.width = canvas.clientWidth;
+
+			mapManager.setCanvasDimensions(canvas.height, canvas.width);
+
 			const ctx = canvas.getContext('2d');
 			if (ctx) {
-				for (let x = 0; x < size; x++) {
-					for (let y = 0; y < size; y++) {
-						const t = mapManager.getTile(x, y);
-						// draw the ground
-						// ctx.drawImage(groundTileHtmlImage, x * tileSize, y * tileSize);
-						ctx.fillStyle = '#43264C';
-						ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-						if (t) {
-							if (t.data.building) {
-								const renderer = t.data.building.getRenderer();
-								ctx.save();
-								const manipulationValues = imageManipulationValues[t.data.facing];
-								ctx.translate(x * tileSize, y * tileSize);
-								ctx.rotate(manipulationValues.r);
-								ctx.translate(manipulationValues.xOffset, manipulationValues.yOffset);
-								ctx.drawImage(renderer, 0, 0);
-								ctx.restore();
-							}
-							if (t.data.holding) {
-								ctx.fillStyle = itemColorMap[t.data.holding];
-								ctx.fillRect(
-									x * tileSize + tileSize / 4,
-									y * tileSize + tileSize / 4,
-									tileSize / 2,
-									tileSize / 2
-								);
-							}
-						}
-					}
-				}
+				const tileDetails = mapManager.getTileDetails();
+				const offsets = mapManager.getOffsets();
+
+				renderTiles({
+					canvas,
+					ctx,
+					mapManager,
+					...tileDetails,
+					...offsets
+				});
+				ctx.fillStyle = 'black';
 
 				//render ghost
 				const cPos = mapManager.getCursorPosition();
@@ -102,7 +54,10 @@
 				if (b) {
 					const imageManipulation = imageManipulationValues[mapManager.getRotationDirection()];
 					ctx.save();
-					ctx.translate(cPos.tile.x * tileSize, cPos.tile.y * tileSize);
+					ctx.translate(
+						cPos.tile.x * tileSize - offsets.xOffsetPx,
+						cPos.tile.y * tileSize - offsets.yOffsetPx
+					);
 					ctx.rotate(imageManipulation.r);
 					ctx.globalAlpha = 0.5;
 					const buildingImage = b.getRenderer();
@@ -112,7 +67,7 @@
 
 				//render cursor
 
-				const selectedTile = mapManager.getTile(cPos.tile.x, cPos.tile.y);
+				const selectedTile = mapManager.getSelectedTile();
 				const cursorHtmlImage = new Image();
 				if (selectedTile && !selectedTile.inPlayerPlaceRange({ map: mapManager })) {
 					cursorHtmlImage.src = cursorOutOfRangeImageData;
@@ -120,13 +75,21 @@
 					cursorHtmlImage.src = cursorImage;
 				}
 
-				ctx.drawImage(cursorHtmlImage, cPos.tile.x * tileSize, cPos.tile.y * tileSize);
+				ctx.drawImage(
+					cursorHtmlImage,
+					cPos.tile.x * tileSize - offsets.xOffsetPx,
+					cPos.tile.y * tileSize - offsets.yOffsetPx
+				);
 
 				//render player
 				const playerHtmlImage = new Image();
 				playerHtmlImage.src = playerImage;
 				mapManager.getPlayerData();
-				ctx.drawImage(playerHtmlImage, playerData.x, playerData.y);
+				ctx.drawImage(
+					playerHtmlImage,
+					canvas.clientWidth / 2 - tileSize / 2,
+					canvas.clientHeight / 2 - tileSize / 2
+				);
 			}
 		}
 	};
