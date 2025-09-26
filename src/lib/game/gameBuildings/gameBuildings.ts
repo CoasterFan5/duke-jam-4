@@ -1,5 +1,5 @@
 import { Conveyer } from './conveyer';
-import { Crafter } from './crafter';
+import { Crafter } from './crafter/crafter';
 import { Furnace } from './furnace';
 import { Miner } from './miner';
 import { Splitter } from './splitter';

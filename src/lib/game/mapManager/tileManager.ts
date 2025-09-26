@@ -66,4 +66,8 @@ export class TileManager {
 			Math.abs(playerPosition.tile.y - this.data.y) <= 5
 		);
 	}
+
+	onClick({ mapManager }: { mapManager: GameMapManager }) {
+		this.data.building?.onClick({ mapManager, tileManager: this });
+	}
 }

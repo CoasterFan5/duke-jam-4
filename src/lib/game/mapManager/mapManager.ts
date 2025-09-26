@@ -1,5 +1,6 @@
 import { type GameBuildingName } from '../gameBuildings/gameBuildings';
 import type { GameBuilding } from '../gameBuildings/utils/BehaviorBase';
+import { UiManager } from '../uiManager/uiManager';
 import { TileManager, type FacingDirection } from './tileManager';
 import { tileSize } from './tileSize';
 
@@ -19,6 +20,7 @@ export type GameMapType = Record<number, Record<number, TileManager>>;
 
 export class GameMapManager {
 	size = 10;
+	public uiManager: UiManager = new UiManager();
 	private map: GameMapType;
 	private canvasDimensions: {
 		width: number;
@@ -232,12 +234,10 @@ export class GameMapManager {
 	}
 
 	handleClick() {
-		if (this.cursorData.selectedBuilding) {
-			const currentTile = this.getSelectedTile();
-
-			if (currentTile) {
-				const inRange = currentTile.inPlayerPlaceRange({ map: this });
-
+		const currentTile = this.getSelectedTile();
+		if (currentTile) {
+			const inRange = currentTile.inPlayerPlaceRange({ map: this });
+			if (this.cursorData.selectedBuilding) {
 				const validPlacement = this.cursorData.selectedBuilding.isValidPlacement({
 					tile: currentTile,
 					gameManager: this
@@ -255,6 +255,10 @@ export class GameMapManager {
 						currentTile.data.y
 					);
 				}
+			} else {
+				currentTile.onClick({
+					mapManager: this
+				});
 			}
 		}
 	}

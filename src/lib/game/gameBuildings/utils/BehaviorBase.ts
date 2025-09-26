@@ -1,5 +1,7 @@
 import type { GameItem, GameMapManager } from '$lib/game/mapManager/mapManager';
 import type { TileManager } from '$lib/game/mapManager/tileManager';
+import type { UiManager } from '$lib/game/uiManager/uiManager';
+import type { UiRenderType } from '$lib/game/uiManager/uiRenderType';
 
 export type TickMethodParams = {
 	thisTile: TileManager;
@@ -22,6 +24,15 @@ export type CanAcceptItemParams = {
 	itemName: GameItem;
 };
 
+export type OnClickParams = {
+	mapManager: GameMapManager;
+	tileManager: TileManager;
+};
+
+export type GetUiParams = {
+	uiManager: UiManager;
+};
+
 export abstract class GameBuilding {
 	private COOLDOWN_TIME = 5_000;
 
@@ -42,6 +53,16 @@ export abstract class GameBuilding {
 	}
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	postPlaceAction(params: PlaceActionParams) {
+		return;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getUi(params: GetUiParams): UiRenderType {
+		return undefined;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	onClick(params: OnClickParams): void {
 		return;
 	}
 }

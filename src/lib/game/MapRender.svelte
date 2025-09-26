@@ -4,12 +4,15 @@
 	import cursorImage from '$lib/assets/cursor.png';
 	import cursorOutOfRangeImageData from '$lib/assets/cursor_out_of_range.png';
 	import cursorGoodImageData from '$lib/assets/cursor_good.png';
+	import cursorInteractImageData from '$lib/assets/cursor_interact.png';
 	import groundTile from '$lib/assets/ground.png';
 	import { KeyboardManager } from './keyboardManager';
 	import { tickPlayerMovement } from './playerManager/tickPlayerMovement';
 	import { tileSize } from './mapManager/tileSize';
 	import { renderTiles } from './renderHelpers/renderTiles';
 	import { imageManipulationValues } from './renderHelpers/imageManipulationValues';
+
+	let uiKey = $state(0);
 
 	const {
 		mapManager,
@@ -77,7 +80,11 @@
 						cursorHtmlImage.src = cursorOutOfRangeImageData;
 					}
 				} else {
-					cursorHtmlImage.src = cursorImage;
+					if (selectedTile && selectedTile.data.building?.getUi) {
+						cursorHtmlImage.src = cursorInteractImageData;
+					} else {
+						cursorHtmlImage.src = cursorImage;
+					}
 				}
 
 				ctx.drawImage(
@@ -95,6 +102,11 @@
 					canvas.clientWidth / 2 - tileSize / 2,
 					canvas.clientHeight / 2 - tileSize / 2
 				);
+
+				// render ui elements
+				if (mapManager.uiManager.needsRendering()) {
+					uiKey += 1;
+				}
 			}
 		}
 	};
@@ -121,6 +133,13 @@
 	});
 </script>
 
+{#key uiKey}
+	{@const details = mapManager.uiManager.getUi()}
+	{@const CustomComp = details?.component}
+	{#if CustomComp}
+		<CustomComp {...details.props} />
+	{/if}
+{/key}
 <canvas bind:this={canvas}> </canvas>
 
 <style lang="scss">
