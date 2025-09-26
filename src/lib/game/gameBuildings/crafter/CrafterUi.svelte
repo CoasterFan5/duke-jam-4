@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { itemImageMap } from '$lib/game/colorMaps';
 	import UiBase from '$lib/game/uiManager/UiBase.svelte';
 	import type { UiManager } from '$lib/game/uiManager/uiManager';
 	import type { Crafter } from './crafter';
@@ -17,8 +18,14 @@
 	<div class="recipieOptions">
 		{#each craftingRecipieNames as rName (rName)}
 			{@const recipieDetails = craftingRecipies[rName]}
-			<button class="recipie">
-				{recipieDetails.product}
+			<button
+				class="recipie"
+				onclick={() => {
+					crafter.setRecipie(rName);
+					uiManager.clearUi();
+				}}
+			>
+				<img src={itemImageMap[recipieDetails.product].src} alt={recipieDetails.product} />
 			</button>
 		{/each}
 	</div>
@@ -32,7 +39,7 @@
 		height: 50%;
 		background: #585652;
 		padding: 0.25rem;
-		gap: 0.25rem;
+		gap: 0.1rem;
 	}
 
 	.recipie {
@@ -47,5 +54,10 @@
 		background-image: linear-gradient(0deg, var(--cW), var(--c));
 		border-top: 1px solid rgba(0, 0, 0, 0.25);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+
+		img {
+			height: 100%;
+			width: 100%;
+		}
 	}
 </style>

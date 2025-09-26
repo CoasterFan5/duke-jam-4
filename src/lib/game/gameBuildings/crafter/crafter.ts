@@ -27,6 +27,10 @@ export class Crafter extends GameBuilding {
 		ironGear: {
 			count: 0,
 			max: 10
+		},
+		ironRod: {
+			count: 0,
+			max: 10
 		}
 	};
 
@@ -119,5 +123,9 @@ export class Crafter extends GameBuilding {
 				uiManager: mapManager.uiManager
 			})
 		);
+	}
+
+	setRecipie(name: RecipieName) {
+		this.selectedRecipie = name;
 	}
 }
