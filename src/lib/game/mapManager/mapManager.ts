@@ -188,6 +188,10 @@ export class GameMapManager {
 		this.cursorData.selectedBuilding = building;
 	}
 
+	clearSelectedBuilding() {
+		this.cursorData.selectedBuilding = undefined;
+	}
+
 	getSelectedBuilding() {
 		return this.cursorData.selectedBuilding;
 	}

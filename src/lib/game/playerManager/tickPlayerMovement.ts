@@ -21,4 +21,8 @@ export const tickPlayerMovement = (
 	if (keyManager.isKeyActive('D') || keyManager.isKeyActive('arrowright')) {
 		mapManager.addPlayerPosition(realDelta * playerSpeed, 0);
 	}
+
+	if (keyManager.isKeyActive('escape')) {
+		mapManager.clearSelectedBuilding();
+	}
 };
